@@ -1,0 +1,660 @@
+From b95874ffffcde0350f282bdeed62c0926c61be6c Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 16:23:53 +0800
+Subject: [PATCH] =?UTF-8?q?=E5=A2=9E=E5=8A=A0=E6=B3=A8=E9=87=8A?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .idea/vcs.xml    | 6 ++++++
+ app/build.gradle | 3 +++
+ settings.gradle  | 2 ++
+ 3 files changed, 11 insertions(+)
+ create mode 100644 .idea/vcs.xml
+
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+index 0000000..94a25f7
+--- /dev/null
++++ b/.idea/vcs.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/app/build.gradle b/app/build.gradle
+index c17f8c4..75a9ff7 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -31,5 +31,8 @@ dependencies {
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
++
++    // add flutter to app
+     implementation project(path: ':flutter')
++    // add flutter to app
+ }
+diff --git a/settings.gradle b/settings.gradle
+index 65f1a3c..b38a11f 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1,5 +1,6 @@
+ include ':app'
+ rootProject.name='FlutterApp'
++// add flutter to app
+ setBinding(new Binding([gradle: this]))                                // new
+ evaluate(new File(                                                     // new
+         settingsDir.parentFile,                                              // new
+@@ -8,3 +9,4 @@ evaluate(new File(                                                     // new
+ 
+ include ':flutter_project'
+ project(':flutter_project').projectDir = new File('../flutter_project')
++// add flutter to app
+-- 
+2.20.1
+
+From d198c498192bc067db4ca9f92d57281427da31bb Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 16:28:23 +0800
+Subject: [PATCH] =?UTF-8?q?=E8=B0=83=E6=95=B4=E7=95=8C=E9=9D=A2?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../com/example/flutter/app/MainActivity.java    | 16 ++++++++++++----
+ app/src/main/res/layout/content_main.xml         |  3 ++-
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/app/src/main/java/com/example/flutter/app/MainActivity.java b/app/src/main/java/com/example/flutter/app/MainActivity.java
+index 2c412f8..2f4339c 100644
+--- a/app/src/main/java/com/example/flutter/app/MainActivity.java
++++ b/app/src/main/java/com/example/flutter/app/MainActivity.java
+@@ -1,13 +1,15 @@
+ package com.example.flutter.app;
+ 
+ import android.os.Bundle;
++import android.view.Menu;
++import android.view.MenuItem;
++import android.view.View;
++
+ import com.google.android.material.floatingactionbutton.FloatingActionButton;
+ import com.google.android.material.snackbar.Snackbar;
++
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
+-import android.view.View;
+-import android.view.Menu;
+-import android.view.MenuItem;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
+         Toolbar toolbar = findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
+ 
+-       FloatingActionButton fab = findViewById(R.id.fab);
++        FloatingActionButton fab = findViewById(R.id.fab);
+         fab.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+@@ -26,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
+                         .setAction("Action", null).show();
+             }
+         });
++        findViewById(R.id.tv_start_flutter).setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++
++            }
++        });
+     }
+ 
+     @Override
+diff --git a/app/src/main/res/layout/content_main.xml b/app/src/main/res/layout/content_main.xml
+index a218946..cd6716d 100644
+--- a/app/src/main/res/layout/content_main.xml
++++ b/app/src/main/res/layout/content_main.xml
+@@ -10,9 +10,10 @@
+     tools:context=".MainActivity">
+ 
+     <TextView
++        android:id="@+id/tv_start_flutter"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="Hello World!"
++        android:text="点我启动Flutter!"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+-- 
+2.20.1
+
+From a495a483cacdd162ea2270f937b1472536350da8 Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 16:32:32 +0800
+Subject: [PATCH] =?UTF-8?q?=E5=90=AF=E5=8A=A8=20FlutterActivity?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ app/src/main/AndroidManifest.xml                            | 1 +
+ app/src/main/java/com/example/flutter/app/MainActivity.java | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 805f486..55b306b 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -19,6 +19,7 @@
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
++        <activity android:name="io.flutter.embedding.android.FlutterActivity" />
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+diff --git a/app/src/main/java/com/example/flutter/app/MainActivity.java b/app/src/main/java/com/example/flutter/app/MainActivity.java
+index 2f4339c..cf49b9b 100644
+--- a/app/src/main/java/com/example/flutter/app/MainActivity.java
++++ b/app/src/main/java/com/example/flutter/app/MainActivity.java
+@@ -1,5 +1,6 @@
+ package com.example.flutter.app;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
+ import android.view.Menu;
+ import android.view.MenuItem;
+@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
++import io.flutter.embedding.android.FlutterActivity;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
+             @Override
+             public void onClick(View v) {
+ 
++                Intent action = FlutterActivity.createDefaultIntent(MainActivity.this);
++                startActivity(action);
+             }
+         });
+     }
+-- 
+2.20.1
+
+From 2c5d43b8513ece5948aa67ba959d415758c5588a Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 20:24:20 +0800
+Subject: [PATCH] =?UTF-8?q?=E6=94=AF=E6=8C=81=E6=BA=90=E7=A0=81=E9=9B=86?=
+ =?UTF-8?q?=E6=88=90=E5=92=8CAAR=E9=9B=86=E6=88=90?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ app/build.gradle  | 11 ++++++++++-
+ build.gradle      |  7 ++++++-
+ gradle.properties |  4 ++++
+ settings.gradle   | 17 ++++++++++-------
+ 4 files changed, 30 insertions(+), 9 deletions(-)
+
+diff --git a/app/build.gradle b/app/build.gradle
+index 75a9ff7..31b299e 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -16,6 +16,9 @@ android {
+             minifyEnabled false
+             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+         }
++        profile {
++            initWith debug
++        }
+     }
+     compileOptions {
+         sourceCompatibility = 1.8
+@@ -33,6 +36,12 @@ dependencies {
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+ 
+     // add flutter to app
+-    implementation project(path: ':flutter')
++    if (flutterMode == 'source') {
++        implementation project(path: ':flutter')
++    } else {
++        debugImplementation 'com.example.flutter_project:flutter_debug:1.0'
++        profileImplementation 'com.example.flutter_project:flutter_profile:1.0'
++        releaseImplementation 'com.example.flutter_project:flutter_release:1.0'
++    }
+     // add flutter to app
+ }
+diff --git a/build.gradle b/build.gradle
+index a5bb815..3c92f7c 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -18,7 +18,12 @@ allprojects {
+     repositories {
+         google()
+         jcenter()
+-        
++        maven {
++            url '/Users/chenming/wd/flutter_android_template/flutter_project/build/host/outputs/repo'
++        }
++        maven {
++            url 'https://storage.googleapis.com/download.flutter.io'
++        }
+     }
+ }
+ 
+diff --git a/gradle.properties b/gradle.properties
+index 199d16e..94e3c27 100644
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -18,3 +18,7 @@ android.useAndroidX=true
+ # Automatically convert third-party libraries to use AndroidX
+ android.enableJetifier=true
+ 
++# https://flutter.dev/docs/development/add-to-app/android/project-setup
++# Option A - AAR, 产物集成
++# Option B - Source, 源码集成
++flutterMode='aar'
+diff --git a/settings.gradle b/settings.gradle
+index b38a11f..9882f76 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1,12 +1,15 @@
+ include ':app'
+ rootProject.name='FlutterApp'
+ // add flutter to app
+-setBinding(new Binding([gradle: this]))                                // new
+-evaluate(new File(                                                     // new
+-        settingsDir.parentFile,                                              // new
+-        'flutter_project/.android/include_flutter.groovy'                         // new
+-))
++if (flutterMode == 'source') {
++    setBinding(new Binding([gradle: this]))                                // new
++    evaluate(new File(                                                     // new
++            settingsDir.parentFile,                                              // new
++            'flutter_project/.android/include_flutter.groovy'                         // new
++    ))
+ 
+-include ':flutter_project'
+-project(':flutter_project').projectDir = new File('../flutter_project')
++    include ':flutter_project'
++    project(':flutter_project').projectDir = new File('../flutter_project')
++}
+ // add flutter to app
++
+-- 
+2.20.1
+
+From 9cdb1ab692acb4665d0c9892ef9846d9ff2a5ee3 Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 21:07:40 +0800
+Subject: [PATCH] =?UTF-8?q?=E6=96=B0=E5=BB=BAarmeabi=E7=9B=AE=E5=BD=95?=
+ =?UTF-8?q?=E6=A8=A1=E6=8B=9F=E6=97=A7=E9=A1=B9=E7=9B=AE?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../main/jniLibs/armeabi/libbitmap-profiler.so  | Bin 0 -> 22160 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 app/src/main/jniLibs/armeabi/libbitmap-profiler.so
+
+diff --git a/app/src/main/jniLibs/armeabi/libbitmap-profiler.so b/app/src/main/jniLibs/armeabi/libbitmap-profiler.so
+new file mode 100644
+index 0000000000000000000000000000000000000000..88c8c68c1fec7cc71749243141a751a31b8dc7b2
+GIT binary patch
+literal 22160
+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
+
+literal 0
+HcmV?d00001
+
+-- 
+2.20.1
+
+From 93ae4ed7bacc52632f538b6da0f2f0f2c607c967 Mon Sep 17 00:00:00 2001
+From: kingcmchen <kingcmchen@163.com>
+Date: Sun, 28 Jun 2020 21:09:42 +0800
+Subject: [PATCH] =?UTF-8?q?=E6=94=AF=E6=8C=81=E6=BA=90=E7=A0=81=E9=9B=86?=
+ =?UTF-8?q?=E6=88=90=E5=92=8CAAR=E9=9B=86=E6=88=90=E5=88=87=E6=8D=A2?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ app/build.gradle  | 31 +++++++++++++++++++++++++++++++
+ build.gradle      |  2 +-
+ gradle.properties |  6 +++---
+ 3 files changed, 35 insertions(+), 4 deletions(-)
+
+diff --git a/app/build.gradle b/app/build.gradle
+index 31b299e..fda5aee 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -15,15 +15,44 @@ android {
+         release {
+             minifyEnabled false
+             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
++            // 注意这个 ndk 配置不要放在 defaultConfig 块中!
++            ndk {
++                abiFilters "armeabi"
++            }
+         }
+         profile {
+             initWith debug
++            ndk {
++                abiFilters "armeabi"
++            }
+         }
+     }
+     compileOptions {
+         sourceCompatibility = 1.8
+         targetCompatibility = 1.8
+     }
++
++    // 通过拷贝文件的方式来解决旧项目找不到 libflutter.so 的问题
++    // 这里的旧项目指那些较老的、只支持 armeabi 的项目
++    afterEvaluate {
++        applicationVariants.each { variant ->
++            def buildTypeName = variant.buildType.name
++            def hasSoFile = buildTypeName == 'release' || buildTypeName == 'profile'
++            if (hasSoFile) {
++                def taskPostfix = variant.name.substring(0, 1).toUpperCase() + variant.name.substring(1)
++                // 当前可兼容 android gradle plugin 3.5, 其他版本未测试!
++                project.task("copyFlutterSo$taskPostfix", type: Copy) {
++                    print('copy so')
++                    from "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi-v7a"
++                    into "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi"
++                    include 'libflutter.so'
++                    include 'libapp.so'
++                }
++                project.tasks["copyFlutterSo$taskPostfix"].dependsOn(project.tasks["merge$taskPostfix" + "NativeLibs"])
++                project.tasks["strip$taskPostfix" + "DebugSymbols"].dependsOn(project.tasks["copyFlutterSo$taskPostfix"])
++            }
++        }
++    }
+ }
+ 
+ dependencies {
+@@ -36,6 +65,8 @@ dependencies {
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+ 
+     // add flutter to app
++    // source - 源码集成
++    // aar - AAR产物集成
+     if (flutterMode == 'source') {
+         implementation project(path: ':flutter')
+     } else {
+diff --git a/build.gradle b/build.gradle
+index 3c92f7c..456d636 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -19,7 +19,7 @@ allprojects {
+         google()
+         jcenter()
+         maven {
+-            url '/Users/chenming/wd/flutter_android_template/flutter_project/build/host/outputs/repo'
++            url '../../flutter_fake_repo/host/outputs/repo'
+         }
+         maven {
+             url 'https://storage.googleapis.com/download.flutter.io'
+diff --git a/gradle.properties b/gradle.properties
+index 94e3c27..e310ed5 100644
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -19,6 +19,6 @@ android.useAndroidX=true
+ android.enableJetifier=true
+ 
+ # https://flutter.dev/docs/development/add-to-app/android/project-setup
+-# Option A - AAR, 产物集成
+-# Option B - Source, 源码集成
+-flutterMode='aar'
++# Option A - aar, AAR产物集成
++# Option B - source, Source源码集成
++flutterMode='aar' # 'source'
+-- 
+2.20.1
+

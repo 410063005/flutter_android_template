@@ -1,0 +1,15 @@
+include ':app'
+rootProject.name='FlutterApp'
+// add flutter to app
+if (flutterMode == 'source') {
+    setBinding(new Binding([gradle: this]))                                // new
+    evaluate(new File(                                                     // new
+            settingsDir.parentFile,                                              // new
+            'flutter_project/.android/include_flutter.groovy'                         // new
+    ))
+
+    include ':flutter_project'
+    project(':flutter_project').projectDir = new File('../flutter_project')
+}
+// add flutter to app
+
