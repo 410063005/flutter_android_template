@@ -37,17 +37,18 @@ android {
     afterEvaluate {
         applicationVariants.each { variant ->
             def buildTypeName = variant.buildType.name
+            def taskPostfix = variant.name.substring(0, 1).toUpperCase() + variant.name.substring(1)
+            // 当前可兼容 android gradle plugin 3.5, 其他版本未测试!
+            project.task("copyFlutterSo$taskPostfix", type: Copy) {
+                println("copy so for $buildTypeName")
+                from "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi-v7a"
+                into "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi"
+                include 'libflutter.so'
+                include 'libapp.so'
+            }
             def hasSoFile = buildTypeName == 'release' || buildTypeName == 'profile'
+            println("hasSoFile for $buildTypeName is $hasSoFile")
             if (hasSoFile) {
-                def taskPostfix = variant.name.substring(0, 1).toUpperCase() + variant.name.substring(1)
-                // 当前可兼容 android gradle plugin 3.5, 其他版本未测试!
-                project.task("copyFlutterSo$taskPostfix", type: Copy) {
-                    print('copy so')
-                    from "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi-v7a"
-                    into "$buildDir/intermediates/merged_native_libs/$taskPostfix/out/lib/armeabi"
-                    include 'libflutter.so'
-                    include 'libapp.so'
-                }
                 project.tasks["copyFlutterSo$taskPostfix"].dependsOn(project.tasks["merge$taskPostfix" + "NativeLibs"])
                 project.tasks["strip$taskPostfix" + "DebugSymbols"].dependsOn(project.tasks["copyFlutterSo$taskPostfix"])
             }
